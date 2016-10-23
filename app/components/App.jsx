@@ -1,15 +1,27 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var NewVideoForm = require('./NewVideoForm.jsx');
-var VideoTable = require('./VideoTable.jsx');
-var $ = require('jQuery');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Router = require('react-router');
+const NewVideoForm = require('./NewVideoForm.jsx');
+const VideoTable = require('./VideoTable.jsx');
+const utils = require('../../lib/utils/videoHelpers.js');
+const bootstrap = require('bootstrap');
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+
     this.state = {
-      videoList: null
-    }
+      videoList: []
+    };
+  }
+
+  componentDidMount() {
+    this.getAllVideos = $.get('/getVideos', function(data) {
+      var videos = utils.getAllVideoObjects(data);
+      this.setState({
+        videoList: videos
+      });
+    }.bind(this));
   }
 
   render() {
@@ -23,23 +35,21 @@ class App extends React.Component {
 
   handleNewVideoSubmit(e) {
     if (e.key === 'Enter') {
-      $.ajax({
-        url: '/submitVideo',
-        dataType: 'json',
-        type: 'POST',
-        data: {videoUrl: e.target.value},
-        success: function(data) {
-          console.log('yay data sent!');
-        }.bind(this),
-        error: function(err) {
-          console.error(err); 
-        }
-      })
+      let input = e.target.value;
+
+      let iFrameSrc = utils.createIFrameSrc(utils.getVideoId(input));
+      let videoId = utils.getVideoId(input);
+
+      if (utils.isValidUrl(input)) {
+        $.post('/submitVideo', {videoId: videoId, videoUrl: input});
+      } else {
+        console.log('Please enter a valid url');
+      }
     }
   }
 
   handleVideoClick(video) {
-
+    window.location = '/video/' + video.videoId;
   }
 }
 
