@@ -3,7 +3,7 @@ var Sequelize = require('sequelize');
 var db = new Sequelize('youlearnDB', 'root', '', {
   host: 'localhost',
   dialect: 'sqlite', 
-  storage: './youlearnDB.sqlite'
+  storage: './db/youlearnDB.sqlite'
 });
 
 db
@@ -13,6 +13,6 @@ db
   })
   .catch(function(err) {
     console.log('cannot connect to database');
-  })
+  });
 
 module.exports = db;
