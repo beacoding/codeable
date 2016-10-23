@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.sendFile('./public/index.html', { title: 'Express' });	
+/* GET videos listing. */
+
+router.get('/:videoId', function(req, res, next) {
+	res.render('video', {title: 'You Learn'});	
 });
 
 module.exports = router;
