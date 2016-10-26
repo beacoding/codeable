@@ -2,8 +2,8 @@ const React = require('react');
 const VideoRow = require('./VideoRow.jsx');
 
 
-var VideoTable = ({videos, handleVideoClick}) => {
-	let allVideoRows = [];
+const VideoTable = ({videos}) => {
+	const allVideoRows = [];
 
 	for (var i = 0; i < videos.length; i += 3) {
 		let row;
@@ -23,7 +23,7 @@ var VideoTable = ({videos, handleVideoClick}) => {
 		<div className="row">
 			<div className="col-md-12 photoTable">
 			{
-				allVideoRows.map(row => <VideoRow key={row[0].id} handleVideoClick={handleVideoClick} row={row}/>)
+				allVideoRows.map(row => <VideoRow key={row[0].id} row={row}/>)
 			}
 			</div>
 		</div>
