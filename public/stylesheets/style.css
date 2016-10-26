@@ -1,10 +1,45 @@
 body {
-  padding: 50px;
+  padding: 20px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+  margin-bottom: 30px;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #00B7FF;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.logo-enclosing{
+	padding-bottom: 20px;
+}
+
+.logo-title {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1em;
+	padding: 10px;
+}
+
+.video-player-title {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.5em;
+	padding: 20px;
+	text-align: center;
 }
 
 .photoTable {
@@ -15,6 +50,25 @@ a {
 }
 
 .video-entry-image-size {
-	width: 400px;
+	width: 300px;
+	height: 350px;
 	padding: 20px;
+}
+
+.video-entry-responsive {
+	padding: 5px;
+}
+
+.object-fit_cover {
+	object-fit: cover;
+}
+
+.filter-video-entry {
+    -webkit-filter: contrast(1.4) saturate(1.8) sepia(.6);
+    filter: contrast(1.4) saturate(1.8) sepia(.6);
+}
+
+.videoPlayerIFrame {
+	width: 1000px;
+	height: 400px;
 }

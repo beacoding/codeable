@@ -1,14 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var utils = require('../lib/utils/videoHelpers.js');
-var Video = require('../models/Videos.js');
-var Promise = require("bluebird");
-var request = require('request');
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'YouLearn' });
-});
+const express = require('express');
+const router = express.Router();
+const utils = require('../lib/utils/videoHelpers.js');
+const Video = require('../models/Videos.js');
+const Promise = require("bluebird");
+const request = require('request');
 
 router.post('/submitVideo', function(req, res, next) {
 	const options = {
@@ -26,8 +21,8 @@ router.post('/submitVideo', function(req, res, next) {
 		if (err) {
 			console.error(error)
 		} else {
-			let parsedBody = JSON.parse(body);
-			let snippet = parsedBody.items[0].snippet;
+			const parsedBody = JSON.parse(body);
+			const snippet = parsedBody.items[0].snippet;
 
 			Video.create({
 				videoId: req.body.videoId,
@@ -50,6 +45,27 @@ router.get('/getVideos', function(req, res, next) {
 	.then(function(data) {
 		res.send(data);
 	});
+});
+
+router.get('/checkVideoIdInDB', function(req, res, next) {
+	Video.findOne({
+		where: {videoId: req.query.videoId}
+	})
+	.then(function(video) {
+		if (video) {
+			res.send(200, video);
+		} else {
+			res.send(400, false);
+		}
+	})
+	.catch(function(err) {
+		console.error(err);
+		res.send(404);
+	});
+});
+
+router.get('*', function(req, res, next) {
+  res.render('index', { title: 'YouLearn' });
 });
 
 module.exports = router;
