@@ -21,7 +21,7 @@ const VideoTable = ({videos}) => {
 
 	return (
 		<div className="row">
-			<div className="col-md-12 photoTable">
+			<div className="col-md-12 video-table">
 			{
 				allVideoRows.map(row => <VideoRow key={row[0].id} row={row}/>)
 			}

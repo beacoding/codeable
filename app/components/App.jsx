@@ -45,7 +45,7 @@ class App extends React.Component {
 
       if (utils.isValidUrl(input)) {
         $.post('/submitVideo', {videoId: videoId, videoUrl: input}, function() {
-          window.location = window.location;
+          location.reload();
         });
       } else {
         console.log('Please enter a valid url');
