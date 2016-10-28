@@ -8,7 +8,7 @@ Learning how to program is quite the process. It involves having multiple compon
 
 ## Info
 
-As of October 26, 2016, Codeable is currently a work in progress although an end-to-end flow in terms of submission of videos has been achieved. I am currently working on establishing sessions for users, and my aim is to add different options for different languages other than python as well. A GIF is down below for what it looks like as of October 26, 2016. 
+As of October 26, 2016, Codeable is currently a work in progress although an end-to-end flow in terms of submission of videos has been achieved. I am currently working on establishing sessions for users, and my aim is to add different options for different languages other than python as well. A GIF is down below for what it looks like as of October 26, 2016 (a bare bones but fully functional application)
 
 ## Built With
 
@@ -16,5 +16,5 @@ As of October 26, 2016, Codeable is currently a work in progress although an end
 * [SQLite3](https://sqlite.org/) - Database used
 * [Node.js](https://nodejs.org/en/) - Server
 
-![Alt Text](http://gph.is/2eBK5XM)
+![Alt Text](https://media.giphy.com/media/l0MYPYcnnRF2r7WFO/source.gif)
 
