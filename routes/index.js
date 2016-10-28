@@ -4,6 +4,7 @@ const utils = require('../lib/utils/videoHelpers.js');
 const Video = require('../models/Videos.js');
 const Promise = require("bluebird");
 const request = require('request');
+const keys = require('../lib/keys.js');
 
 router.post('/submitVideo', function(req, res, next) {
 	const options = {
@@ -11,7 +12,7 @@ router.post('/submitVideo', function(req, res, next) {
 		uri: 'https://www.googleapis.com/youtube/v3/videos',
 		qs: {
 			id: req.body.videoId,
-			key: 'AIzaSyBr7q2jy8PwKwwlIdNrOfDvl5ILgypgF7o',
+			key: keys.youtubeKey,
 			part: 'snippet',
 			type: 'video'
 		}

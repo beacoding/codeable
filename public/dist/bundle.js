@@ -27907,7 +27907,7 @@
 			{ className: 'row' },
 			React.createElement(
 				'div',
-				{ className: 'col-md-12 photoTable' },
+				{ className: 'col-md-12 video-table' },
 				allVideoRows.map(function (row) {
 					return React.createElement(VideoRow, { key: row[0].id, row: row });
 				})
@@ -27974,10 +27974,13 @@
 			React.createElement(
 				_reactRouter.Link,
 				{ to: '/video/' + video.videoId },
-				React.createElement('img', {
-					className: 'video-entry-responsive img-responsive',
-					src: video.videoImage
-				})
+				React.createElement(
+					'div',
+					{ className: 'video-entry-image' },
+					React.createElement('img', {
+						src: video.videoImage
+					})
+				)
 			)
 		);
 	};

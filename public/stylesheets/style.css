@@ -42,11 +42,54 @@ a:active {
 	text-align: center;
 }
 
-.photoTable {
+.video-table {
 	padding: 30px;
 }
 
-.photoEntry {
+.video-entry:hover {
+	opacity: 0.8;
+	-webkit-filter: blur(3px)
+}
+
+.video-entry-image {
+    position:relative;
+    width:100%;
+    height:100%;
+    margin: 5px;
+}
+.video-entry-image img {
+    width:100%;
+    vertical-align:top;
+
+}
+
+
+.video-entry-image:after, .video-entry-image:before {
+    position:absolute;
+    opacity:0;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+}
+.video-entry-image:after {
+    content:'\A';
+    width:100%; height:100%;
+    top:0; left:0;
+    background:rgba(0,0,0,0.6);
+}
+.video-entry-image:before {
+    width:100%;
+    color:#fff;
+    z-index:1;
+    bottom:0;
+    padding:4px 10px;
+    text-align:center;
+    background:red;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+}
+
+.video-entry-image:hover:after, .video-entry-image:hover:before {
+    opacity:1;
 }
 
 .video-entry-image-size {

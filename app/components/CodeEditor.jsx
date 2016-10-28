@@ -1,13 +1,13 @@
 const React = require('react');
 
 const CodeEditor = () => {
-	return (
-		<div className="col-md-6">
-			<div className="embed-responsive embed-responsive-4by3">
-				<iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
-			</div>
+  return (
+    <div className="col-md-6">
+      <div className="embed-responsive embed-responsive-4by3">
+        <iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
+      </div>
 		</div>
-	)
+    )
 }
 
 

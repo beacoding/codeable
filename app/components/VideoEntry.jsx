@@ -4,11 +4,12 @@ import { Router, Route, Link, browserHistory } from 'react-router'
 const VideoEntry = ({video}) => {
 	return (
 		<div className="col-md-4">
-			<Link to={`/video/${video.videoId}`}>
+			<Link to={`/video/${video.videoId}`} >
+				<div className="video-entry-image">
 				<img 
-					className="video-entry-responsive img-responsive"
 					src={video.videoImage}
 				/>
+				</div>
 			</Link>
 		</div>
 	)
