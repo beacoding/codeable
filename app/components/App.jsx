@@ -34,8 +34,19 @@ class App extends React.Component {
     );
   }
 
+  //helpers
+  outf(text) { 
+      var mypre = document.getElementById("output"); 
+      mypre.innerHTML = mypre.innerHTML + text; 
+  } 
 
+  builtinRead(x) {
+      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+              throw "File not found: '" + x + "'";
+      return Sk.builtinFiles["files"][x];
+  }
 
+  //handlers
   handleNewVideoSubmit(e) {
     if (e.key === 'Enter') {
       const input = e.target.value;
@@ -60,5 +71,3 @@ ReactDOM.render((
     <Route path="/video/:videoId" component={VideoPage}></Route>
   </Router>
 ), document.getElementById('app'))
-
-// ReactDOM.render(<App />, document.getElementById('app'));

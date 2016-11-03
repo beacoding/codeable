@@ -1,4 +1,5 @@
 const React = require('react');
+var ReactDOM = require ('react-dom');
 const utils = require('../../lib/utils/videoHelpers.js');
 const VideoPlayer = require('./VideoPlayer.jsx');
 const CodeEditor = require('./CodeEditor.jsx');
@@ -51,6 +52,7 @@ class VideoPage extends React.Component {
 	  	)
   	}
   }
+
 }
 
 module.exports = VideoPage;
