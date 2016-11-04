@@ -15,8 +15,4 @@ const VideoEntry = ({video}) => {
 	)
 }
 
-// VideoEntry.proptypes = {
-//   video: React.Proptypes.string.isRequired
-// };
-
 module.exports = VideoEntry;

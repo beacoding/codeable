@@ -2,7 +2,7 @@ const React = require('react');
 
 const QuestionSection = ({video}) => {
   return (
-    <div className="col-md-6">
+    <div className="question-section-container">
       <h4>Question Section</h4>
     </div>
     )

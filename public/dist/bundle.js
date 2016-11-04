@@ -65,7 +65,7 @@
 	var VideoTable = __webpack_require__(/*! ./VideoTable.jsx */ 236);
 	var VideoPage = __webpack_require__(/*! ./VideoPage.jsx */ 239);
 	var utils = __webpack_require__(/*! ../../lib/utils/videoHelpers.js */ 240);
-	var bootstrap = __webpack_require__(/*! bootstrap */ 245);
+	var bootstrap = __webpack_require__(/*! bootstrap */ 250);
 	
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -28001,10 +28001,6 @@
 		);
 	};
 	
-	// VideoEntry.proptypes = {
-	//   video: React.Proptypes.string.isRequired
-	// };
-	
 	module.exports = VideoEntry;
 
 /***/ },
@@ -28027,9 +28023,11 @@
 	var React = __webpack_require__(/*! react */ 3);
 	var ReactDOM = __webpack_require__(/*! react-dom */ 97);
 	var utils = __webpack_require__(/*! ../../lib/utils/videoHelpers.js */ 240);
-	var VideoPlayer = __webpack_require__(/*! ./VideoPlayer.jsx */ 258);
-	var CodeEditor = __webpack_require__(/*! ./CodeEditor.jsx */ 259);
-	var QuestionSection = __webpack_require__(/*! ./QuestionSection.jsx */ 261);
+	var VideoPlayer = __webpack_require__(/*! ./VideoPlayer.jsx */ 245);
+	var CodeEditor = __webpack_require__(/*! ./CodeEditor.jsx */ 246);
+	var CodeOutput = __webpack_require__(/*! ./CodeOutput.jsx */ 247);
+	var Console = __webpack_require__(/*! ./Console.jsx */ 248);
+	var QuestionSection = __webpack_require__(/*! ./QuestionSection.jsx */ 249);
 	
 	var VideoPage = function (_React$Component) {
 	  _inherits(VideoPage, _React$Component);
@@ -28072,23 +28070,41 @@
 	          null,
 	          React.createElement(
 	            'div',
-	            { className: 'row' },
+	            { className: 'row video-player-container' },
 	            React.createElement(
 	              'div',
-	              { className: 'col-md-12 video-player-title' },
+	              { className: 'col-md-12 title' },
 	              this.state.currentVideo.videoTitle
 	            )
 	          ),
 	          React.createElement(
 	            'div',
 	            { className: 'row' },
-	            React.createElement(VideoPlayer, { video: this.state.currentVideo }),
-	            React.createElement(CodeEditor, null)
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'row' },
-	            React.createElement(QuestionSection, { video: this.state.currentVideo })
+	            React.createElement(
+	              'div',
+	              { className: 'col-md-8' },
+	              React.createElement(VideoPlayer, { video: this.state.currentVideo })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'col-md-4' },
+	              React.createElement(CodeEditor, null)
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'col-md-4' },
+	              React.createElement(QuestionSection, { video: this.state.currentVideo })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'col-md-4' },
+	              React.createElement(Console, null)
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'col-md-4' },
+	              React.createElement(CodeOutput, null)
+	            )
 	          )
 	        );
 	      }
@@ -28325,27 +28341,299 @@
 
 /***/ },
 /* 245 */
+/*!****************************************!*\
+  !*** ./app/components/VideoPlayer.jsx ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var VideoPlayer = function VideoPlayer(_ref) {
+		var video = _ref.video;
+	
+		return React.createElement(
+			"div",
+			{ className: "embed-responsive embed-responsive-16by9" },
+			React.createElement("iframe", { className: "embed-responsive-item", src: 'https://www.youtube.com/embed/' + video.videoId, allowFullScreen: true })
+		);
+	};
+	
+	module.exports = VideoPlayer;
+
+/***/ },
+/* 246 */
+/*!***************************************!*\
+  !*** ./app/components/CodeEditor.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var CodeEditor = function (_React$Component) {
+	  _inherits(CodeEditor, _React$Component);
+	
+	  function CodeEditor(props) {
+	    _classCallCheck(this, CodeEditor);
+	
+	    var _this = _possibleConstructorReturn(this, (CodeEditor.__proto__ || Object.getPrototypeOf(CodeEditor)).call(this, props));
+	
+	    _this.state = {
+	      codeValue: null
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(CodeEditor, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      if (window.localStorage.hasOwnProperty(window.location)) {
+	        var code = window.localStorage[window.location];
+	
+	        this.setState({
+	          codeValue: code
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var context = this;
+	      var codeEditor = document.getElementById("code-editor");
+	      var editor = CodeMirror.fromTextArea(codeEditor, {
+	        lineNumbers: true,
+	        theme: 'solarized dark',
+	        styleActiveLine: true,
+	        matchBrackets: true,
+	        indent: true
+	      });
+	
+	      editor.on('changes', function (editor, e) {
+	        var code = editor.getValue();
+	        var textArea = document.getElementById("code-editor");
+	        textArea.value = code;
+	        context.saveCode();
+	      });
+	    }
+	
+	    // handleCodeChange(e) {
+	    //   const code = document.getElementById("code-editor");
+	    //   this.saveCode();
+	    // }
+	
+	  }, {
+	    key: 'handleDisplayOutput',
+	    value: function handleDisplayOutput(text) {
+	      var mypre = document.getElementById("output");
+	      mypre.innerHTML = mypre.innerHTML + text;
+	    }
+	  }, {
+	    key: 'builtinRead',
+	    value: function builtinRead(x) {
+	      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) throw "File not found: '" + x + "'";
+	      return Sk.builtinFiles["files"][x];
+	    }
+	  }, {
+	    key: 'handleCodeRun',
+	    value: function handleCodeRun() {
+	      var prog = document.getElementById("code-editor").value;
+	      var mypre = document.getElementById("output");
+	      console.log('this is the output', mypre);
+	      mypre.innerHTML = '';
+	      Sk.pre = "output";
+	      Sk.configure({ output: this.handleDisplayOutput.bind(this), read: this.builtinRead.bind(this) });
+	      (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+	      var myPromise = Sk.misceval.asyncToPromise(function () {
+	        return Sk.importMainWithBody("<stdin>", false, prog, true);
+	      });
+	
+	      myPromise.then(function (mod) {
+	        console.log('success');
+	      }, function (err) {
+	        console.log(err.toString());
+	      });
+	    }
+	  }, {
+	    key: 'saveCode',
+	    value: function saveCode() {
+	      var code = document.getElementById("code-editor").value;
+	      this.setState({
+	        codeValue: code
+	      });
+	      window.localStorage.setItem(window.location, code);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { className: 'code-editor-container' },
+	        React.createElement(
+	          'form',
+	          null,
+	          React.createElement(
+	            'textarea',
+	            { id: 'code-editor' },
+	            this.state.codeValue
+	          ),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'div',
+	            { className: 'row' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', onClick: this.handleCodeRun.bind(this) },
+	              'Run'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return CodeEditor;
+	}(React.Component);
+	
+	module.exports = CodeEditor;
+	
+	/*
+	<iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowfullscreen></iframe>
+	<iframe src="https://trinket.io/embed/python/5375445fcc?toggleCode=true" allowfullscreen></iframe
+	*/
+	
+	/*
+	    <div className="embed-responsive embed-responsive-4by3">
+	      <iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
+	    </div>
+	*/
+
+/***/ },
+/* 247 */
+/*!***************************************!*\
+  !*** ./app/components/CodeOutput.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var CodeOutput = function CodeOutput() {
+		return React.createElement(
+			"div",
+			null,
+			React.createElement("pre", { id: "output" }),
+			React.createElement("div", { id: "mycanvas" })
+		);
+	};
+	
+	module.exports = CodeOutput;
+
+/***/ },
+/* 248 */
+/*!************************************!*\
+  !*** ./app/components/Console.jsx ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var Console = function (_React$Component) {
+		_inherits(Console, _React$Component);
+	
+		function Console(props) {
+			_classCallCheck(this, Console);
+	
+			return _possibleConstructorReturn(this, (Console.__proto__ || Object.getPrototypeOf(Console)).call(this, props));
+		}
+	
+		_createClass(Console, [{
+			key: "render",
+			value: function render() {
+				return React.createElement(
+					"div",
+					{ className: "console-container" },
+					React.createElement("iframe", { frameBorder: "0", src: "/brython-console.html" })
+				);
+			}
+		}]);
+	
+		return Console;
+	}(React.Component);
+	
+	module.exports = Console;
+
+/***/ },
+/* 249 */
+/*!********************************************!*\
+  !*** ./app/components/QuestionSection.jsx ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var QuestionSection = function QuestionSection(_ref) {
+	  var video = _ref.video;
+	
+	  return React.createElement(
+	    "div",
+	    { className: "question-section-container" },
+	    React.createElement(
+	      "h4",
+	      null,
+	      "Question Section"
+	    )
+	  );
+	};
+	
+	module.exports = QuestionSection;
+
+/***/ },
+/* 250 */
 /*!************************************!*\
   !*** ./~/bootstrap/dist/js/npm.js ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-	__webpack_require__(/*! ../../js/transition.js */ 246)
-	__webpack_require__(/*! ../../js/alert.js */ 247)
-	__webpack_require__(/*! ../../js/button.js */ 248)
-	__webpack_require__(/*! ../../js/carousel.js */ 249)
-	__webpack_require__(/*! ../../js/collapse.js */ 250)
-	__webpack_require__(/*! ../../js/dropdown.js */ 251)
-	__webpack_require__(/*! ../../js/modal.js */ 252)
-	__webpack_require__(/*! ../../js/tooltip.js */ 253)
-	__webpack_require__(/*! ../../js/popover.js */ 254)
-	__webpack_require__(/*! ../../js/scrollspy.js */ 255)
-	__webpack_require__(/*! ../../js/tab.js */ 256)
-	__webpack_require__(/*! ../../js/affix.js */ 257)
+	__webpack_require__(/*! ../../js/transition.js */ 251)
+	__webpack_require__(/*! ../../js/alert.js */ 252)
+	__webpack_require__(/*! ../../js/button.js */ 253)
+	__webpack_require__(/*! ../../js/carousel.js */ 254)
+	__webpack_require__(/*! ../../js/collapse.js */ 255)
+	__webpack_require__(/*! ../../js/dropdown.js */ 256)
+	__webpack_require__(/*! ../../js/modal.js */ 257)
+	__webpack_require__(/*! ../../js/tooltip.js */ 258)
+	__webpack_require__(/*! ../../js/popover.js */ 259)
+	__webpack_require__(/*! ../../js/scrollspy.js */ 260)
+	__webpack_require__(/*! ../../js/tab.js */ 261)
+	__webpack_require__(/*! ../../js/affix.js */ 262)
 
 /***/ },
-/* 246 */
+/* 251 */
 /*!**************************************!*\
   !*** ./~/bootstrap/js/transition.js ***!
   \**************************************/
@@ -28413,7 +28701,7 @@
 
 
 /***/ },
-/* 247 */
+/* 252 */
 /*!*********************************!*\
   !*** ./~/bootstrap/js/alert.js ***!
   \*********************************/
@@ -28516,7 +28804,7 @@
 
 
 /***/ },
-/* 248 */
+/* 253 */
 /*!**********************************!*\
   !*** ./~/bootstrap/js/button.js ***!
   \**********************************/
@@ -28650,7 +28938,7 @@
 
 
 /***/ },
-/* 249 */
+/* 254 */
 /*!************************************!*\
   !*** ./~/bootstrap/js/carousel.js ***!
   \************************************/
@@ -28896,7 +29184,7 @@
 
 
 /***/ },
-/* 250 */
+/* 255 */
 /*!************************************!*\
   !*** ./~/bootstrap/js/collapse.js ***!
   \************************************/
@@ -29117,7 +29405,7 @@
 
 
 /***/ },
-/* 251 */
+/* 256 */
 /*!************************************!*\
   !*** ./~/bootstrap/js/dropdown.js ***!
   \************************************/
@@ -29291,7 +29579,7 @@
 
 
 /***/ },
-/* 252 */
+/* 257 */
 /*!*********************************!*\
   !*** ./~/bootstrap/js/modal.js ***!
   \*********************************/
@@ -29639,7 +29927,7 @@
 
 
 /***/ },
-/* 253 */
+/* 258 */
 /*!***********************************!*\
   !*** ./~/bootstrap/js/tooltip.js ***!
   \***********************************/
@@ -30168,7 +30456,7 @@
 
 
 /***/ },
-/* 254 */
+/* 259 */
 /*!***********************************!*\
   !*** ./~/bootstrap/js/popover.js ***!
   \***********************************/
@@ -30285,7 +30573,7 @@
 
 
 /***/ },
-/* 255 */
+/* 260 */
 /*!*************************************!*\
   !*** ./~/bootstrap/js/scrollspy.js ***!
   \*************************************/
@@ -30466,7 +30754,7 @@
 
 
 /***/ },
-/* 256 */
+/* 261 */
 /*!*******************************!*\
   !*** ./~/bootstrap/js/tab.js ***!
   \*******************************/
@@ -30630,7 +30918,7 @@
 
 
 /***/ },
-/* 257 */
+/* 262 */
 /*!*********************************!*\
   !*** ./~/bootstrap/js/affix.js ***!
   \*********************************/
@@ -30799,198 +31087,6 @@
 	
 	}(jQuery);
 
-
-/***/ },
-/* 258 */
-/*!****************************************!*\
-  !*** ./app/components/VideoPlayer.jsx ***!
-  \****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(/*! react */ 3);
-	
-	var VideoPlayer = function VideoPlayer(_ref) {
-		var video = _ref.video;
-	
-		return React.createElement(
-			"div",
-			{ className: "col-md-6" },
-			React.createElement(
-				"div",
-				{ className: "embed-responsive embed-responsive-16by9" },
-				React.createElement("iframe", { className: "embed-responsive-item", src: 'https://www.youtube.com/embed/' + video.videoId, allowFullScreen: true })
-			)
-		);
-	};
-	
-	module.exports = VideoPlayer;
-
-/***/ },
-/* 259 */
-/*!***************************************!*\
-  !*** ./app/components/CodeEditor.jsx ***!
-  \***************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var React = __webpack_require__(/*! react */ 3);
-	
-	var CodeEditor = function (_React$Component) {
-	  _inherits(CodeEditor, _React$Component);
-	
-	  function CodeEditor(props) {
-	    _classCallCheck(this, CodeEditor);
-	
-	    var _this = _possibleConstructorReturn(this, (CodeEditor.__proto__ || Object.getPrototypeOf(CodeEditor)).call(this, props));
-	
-	    _this.state = {
-	      codeValue: null
-	    };
-	    return _this;
-	  }
-	
-	  _createClass(CodeEditor, [{
-	    key: "componentWillMount",
-	    value: function componentWillMount() {
-	      if (window.localStorage.hasOwnProperty(window.location)) {
-	        var code = window.localStorage[window.location];
-	
-	        this.setState({
-	          codeValue: code
-	        });
-	      }
-	    }
-	  }, {
-	    key: "handleCodeChange",
-	    value: function handleCodeChange(e) {
-	      var code = document.getElementById("yourcodebea");
-	      this.saveCode();
-	    }
-	  }, {
-	    key: "handleDisplayOutput",
-	    value: function handleDisplayOutput(text) {
-	      var mypre = document.getElementById("output");
-	      mypre.innerHTML = mypre.innerHTML + text;
-	    }
-	  }, {
-	    key: "builtinRead",
-	    value: function builtinRead(x) {
-	      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined) throw "File not found: '" + x + "'";
-	      return Sk.builtinFiles["files"][x];
-	    }
-	  }, {
-	    key: "handleCodeRun",
-	    value: function handleCodeRun() {
-	      var prog = document.getElementById("yourcodebea").value;
-	      var mypre = document.getElementById("output");
-	      mypre.innerHTML = '';
-	      Sk.pre = "output";
-	      Sk.configure({ output: this.handleDisplayOutput.bind(this), read: this.builtinRead.bind(this) });
-	      (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
-	      var myPromise = Sk.misceval.asyncToPromise(function () {
-	        return Sk.importMainWithBody("<stdin>", false, prog, true);
-	      });
-	
-	      myPromise.then(function (mod) {
-	        console.log('success');
-	      }, function (err) {
-	        console.log(err.toString());
-	      });
-	    }
-	  }, {
-	    key: "saveCode",
-	    value: function saveCode() {
-	      var code = document.getElementById("yourcodebea").value;
-	      this.setState({
-	        codeValue: code
-	      });
-	      window.localStorage.setItem(window.location, code);
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      return React.createElement(
-	        "div",
-	        { className: "col-md-6" },
-	        React.createElement(
-	          "form",
-	          null,
-	          React.createElement(
-	            "textarea",
-	            { id: "yourcodebea", onChange: this.handleCodeChange.bind(this), cols: "40", rows: "10" },
-	            this.state.codeValue
-	          ),
-	          React.createElement("br", null),
-	          React.createElement(
-	            "button",
-	            { type: "button", onClick: this.handleCodeRun.bind(this) },
-	            "Run"
-	          )
-	        ),
-	        React.createElement(
-	          "div",
-	          null,
-	          React.createElement("div", { id: "output" }),
-	          React.createElement("div", { id: "mycanvas" })
-	        )
-	      );
-	    }
-	  }]);
-	
-	  return CodeEditor;
-	}(React.Component);
-	
-	module.exports = CodeEditor;
-	
-	/*
-	<iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowfullscreen></iframe>
-	<iframe src="https://trinket.io/embed/python/5375445fcc?toggleCode=true" allowfullscreen></iframe
-	*/
-	
-	/*
-	    <div className="embed-responsive embed-responsive-4by3">
-	      <iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
-	    </div>
-	*/
-
-/***/ },
-/* 260 */,
-/* 261 */
-/*!********************************************!*\
-  !*** ./app/components/QuestionSection.jsx ***!
-  \********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var React = __webpack_require__(/*! react */ 3);
-	
-	var QuestionSection = function QuestionSection(_ref) {
-	  var video = _ref.video;
-	
-	  return React.createElement(
-	    "div",
-	    { className: "col-md-6" },
-	    React.createElement(
-	      "h4",
-	      null,
-	      "Question Section"
-	    )
-	  );
-	};
-	
-	module.exports = QuestionSection;
 
 /***/ }
 /******/ ]);
