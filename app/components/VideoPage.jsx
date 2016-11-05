@@ -45,7 +45,7 @@ class VideoPage extends React.Component {
             </div>
           </div>
           <div className="video-page-container">
-  	  			<div className="row video-player-container">
+  	  			<div className="row">
   	  				<div className="col-md-12 title">
   	  					{this.state.currentVideo.videoTitle}
     					</div>

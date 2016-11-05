@@ -28132,7 +28132,7 @@
 	            { className: 'video-page-container' },
 	            React.createElement(
 	              'div',
-	              { className: 'row video-player-container' },
+	              { className: 'row' },
 	              React.createElement(
 	                'div',
 	                { className: 'col-md-12 title' },
@@ -28645,7 +28645,7 @@
 	var CodeOutput = function CodeOutput() {
 		return React.createElement(
 			"div",
-			null,
+			{ className: "code-output-container" },
 			React.createElement("pre", { id: "output" }),
 			React.createElement("div", { id: "mycanvas" })
 		);
@@ -28717,7 +28717,21 @@
 	    React.createElement(
 	      "h4",
 	      null,
-	      "Question Section"
+	      "Questions"
+	    ),
+	    React.createElement(
+	      "div",
+	      { className: "row" },
+	      React.createElement(
+	        "div",
+	        { className: "col-md-8" },
+	        React.createElement("input", { className: "form-control", type: "text", placeholder: "Ask a new question here!" })
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "col-md-4" },
+	        React.createElement("input", { className: "form-control", type: "text", placeholder: "Time" })
+	      )
 	    )
 	  );
 	};

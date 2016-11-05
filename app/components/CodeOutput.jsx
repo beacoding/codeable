@@ -1,7 +1,7 @@
 const React = require('react');
 
 const CodeOutput = () => (
-	<div>
+	<div className="code-output-container">
 		<pre id="output"></pre>
 		<div id="mycanvas"></div>
 	</div>
