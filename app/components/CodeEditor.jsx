@@ -19,10 +19,30 @@ class CodeEditor extends React.Component {
     }
   }
 
-  handleCodeChange(e) {
-    const code = document.getElementById("yourcodebea");
-    this.saveCode();
+
+  componentDidMount() {
+    var context = this;
+    var codeEditor = document.getElementById("code-editor")
+    var editor = CodeMirror.fromTextArea(codeEditor, {
+      lineNumbers: true,
+      theme: 'solarized dark',
+      styleActiveLine: true,
+      matchBrackets: true,
+      indent: true,
+    });
+
+    editor.on('changes', function(editor, e){
+      var code = editor.getValue();
+      var textArea = document.getElementById("code-editor");
+      textArea.value = code;
+      context.saveCode();
+    });
   }
+
+  // handleCodeChange(e) {
+  //   const code = document.getElementById("code-editor");
+  //   this.saveCode();
+  // }
 
   handleDisplayOutput(text) {
     const mypre = document.getElementById("output"); 
@@ -36,8 +56,9 @@ class CodeEditor extends React.Component {
   }
 
   handleCodeRun() {
-    const prog = document.getElementById("yourcodebea").value;
+    const prog = document.getElementById("code-editor").value;
     const mypre = document.getElementById("output"); 
+    console.log('this is the output', mypre);
     mypre.innerHTML = ''; 
     Sk.pre = "output";
     Sk.configure({output: this.handleDisplayOutput.bind(this), read:this.builtinRead.bind(this)}); 
@@ -55,7 +76,7 @@ class CodeEditor extends React.Component {
   }
 
   saveCode() {
-    const code = document.getElementById("yourcodebea").value;
+    const code = document.getElementById("code-editor").value;
     this.setState({
       codeValue: code
     });
@@ -64,18 +85,23 @@ class CodeEditor extends React.Component {
 
 	render() {
 	  return (
-	    <div className="col-md-6">
+	    <div className="code-editor-container">
+        <div className="code-editor-nav-bar">
+          <nav className="navbar navbar-default navbar-static-top">
+            <div className="container-fluid">
+              <ul className="nav navbar-nav">
+                <li>Mode</li>
+                <li onClick={this.handleCodeRun.bind(this)}><a href="#">Run</a></li>
+                <li className="save">Save</li>
+              </ul>
+            </div>
+          </nav>
+        </div>
 	    	<form> 
-	    	<textarea id="yourcodebea" onChange={this.handleCodeChange.bind(this)} cols="40" rows="10" >
+	    	<textarea id="code-editor">
 	    	{this.state.codeValue}
-	    	</textarea><br /> 
-	    	<button type="button" onClick={this.handleCodeRun.bind(this)}>Run</button> 
+	    	</textarea><br/>
 	    	</form>
-
-	    	<div>
-	    		<div id="output"></div>
-	    		<div id="mycanvas"></div>
-	    	</div>
 		  </div>
     )
 	}
@@ -92,4 +118,10 @@ module.exports = CodeEditor;
     <div className="embed-responsive embed-responsive-4by3">
       <iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
     </div>
+*/
+
+/*
+        <div className="row">
+          <button type="button" onClick={this.handleCodeRun.bind(this)}>Run</button> 
+        </div>
 */
