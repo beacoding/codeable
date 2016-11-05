@@ -86,13 +86,21 @@ class CodeEditor extends React.Component {
 	render() {
 	  return (
 	    <div className="code-editor-container">
+        <div className="code-editor-nav-bar">
+          <nav className="navbar navbar-default navbar-static-top">
+            <div className="container-fluid">
+              <ul className="nav navbar-nav">
+                <li>Mode</li>
+                <li onClick={this.handleCodeRun.bind(this)}><a href="#">Run</a></li>
+                <li className="save">Save</li>
+              </ul>
+            </div>
+          </nav>
+        </div>
 	    	<form> 
 	    	<textarea id="code-editor">
 	    	{this.state.codeValue}
-	    	</textarea><br />
-        <div className="row">
-	    	  <button type="button" onClick={this.handleCodeRun.bind(this)}>Run</button> 
-        </div>
+	    	</textarea><br/>
 	    	</form>
 		  </div>
     )
@@ -110,4 +118,10 @@ module.exports = CodeEditor;
     <div className="embed-responsive embed-responsive-4by3">
       <iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
     </div>
+*/
+
+/*
+        <div className="row">
+          <button type="button" onClick={this.handleCodeRun.bind(this)}>Run</button> 
+        </div>
 */

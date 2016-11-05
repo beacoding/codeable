@@ -24,6 +24,7 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-router": "^2.8.1",
+    "react-truncate": "^2.0.1",
     "reactify": "^1.1.1",
     "sequelize": "^3.24.5",
     "sequelize-cli": "^2.4.0",

@@ -24,13 +24,21 @@ router.post('/submitVideo', function(req, res, next) {
 		} else {
 			const parsedBody = JSON.parse(body);
 			const snippet = parsedBody.items[0].snippet;
+			console.log(snippet);
+			let videoImage = '';
+
+			if (!snippet.thumbnails.standard) {
+				videoImage = 'http://img.youtube.com/vi/' + req.body.videoId + '/mqdefault.jpg';
+			} else {
+				videoImage = 'http://img.youtube.com/vi/' + req.body.videoId +'/maxresdefault.jpg';
+			}
 
 			Video.create({
 				videoId: req.body.videoId,
 				videoUrl: req.body.videoUrl,
 				videoTitle: snippet.title,
 				videoDescription: snippet.description,
-				videoImage: snippet.thumbnails.standard.url
+				videoImage: videoImage
 			})
 			.then(function() {
 				console.log('successfully sent to the database');

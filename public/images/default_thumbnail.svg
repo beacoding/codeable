@@ -1,0 +1,17 @@
+
+<svg width="637px" height="358px" viewBox="210 605 637 358" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.3 (33839) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="637" height="358"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="637" height="358" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Group" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(210.000000, 605.000000)">
+        <use id="Rectangle-2" stroke="#4990E2" mask="url(#mask-2)" stroke-width="2" fill="#445D7A" xlink:href="#path-1"></use>
+        <text id="CODEABLE" font-family="AdventPro-Regular, Advent Pro" font-size="72" font-weight="normal" fill="#FFFFFF">
+            <tspan x="174.428" y="183">CODEABLE</tspan>
+        </text>
+    </g>
+</svg>

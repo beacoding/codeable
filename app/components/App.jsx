@@ -28,22 +28,35 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <NewVideoForm handleNewVideoSubmit ={this.handleNewVideoSubmit.bind(this)}/>
-        <VideoTable videos={this.state.videoList}/>
+        <div className="homepage-container">
+          <div className="homepage-landing">
+            <div className="overlay">
+              <div className="row">
+                <div className="col-md-12 logo-container">
+                  <a href="/" className="title"> CODEABLE </a>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-4 col-md-offset-4 description-container">
+                  <span>Ready to conquer the programming world?</span><br/>
+                  <span>Join Codeable, your one stop shop for learning how to program</span>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-4 col-md-offset-4 homepage-form">
+                  <NewVideoForm handleNewVideoSubmit ={this.handleNewVideoSubmit.bind(this)}/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="video-table-container">
+          <div className="container">
+            <VideoTable videos={this.state.videoList}/>
+          </div>
+        </div>
       </div>
     );
-  }
-
-  //helpers
-  outf(text) { 
-      var mypre = document.getElementById("output"); 
-      mypre.innerHTML = mypre.innerHTML + text; 
-  } 
-
-  builtinRead(x) {
-      if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
-              throw "File not found: '" + x + "'";
-      return Sk.builtinFiles["files"][x];
   }
 
   //handlers
