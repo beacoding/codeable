@@ -4,8 +4,10 @@ const ReactDOM = require('react-dom');
 const NewVideoForm = require('./NewVideoForm.jsx');
 const VideoTable = require('./VideoTable.jsx');
 const VideoPage = require('./VideoPage.jsx');
+const SearchBox = require('./SearchBox.jsx');
 const utils = require('../../lib/utils/videoHelpers.js');
 const bootstrap = require('bootstrap');
+const API_KEY = require('../../lib/config/apiKeys');
 
 class App extends React.Component {
   constructor(props) {
@@ -20,7 +22,7 @@ class App extends React.Component {
     this.getAllVideos = $.get('/getVideos', function(data) {
       const videos = utils.getAllVideoObjects(data);
       this.setState({
-        videoList: videos
+        videoList: videos,
       });
     }.bind(this));
   }
@@ -39,7 +41,7 @@ class App extends React.Component {
               <div className="row">
                 <div className="col-md-4 col-md-offset-4 description-container">
                   <span>Ready to conquer the programming world?</span><br/>
-                  <span>Join Codeable, your one stop shop for learning how to program</span>
+                  <span>Join Codeable, your one place to learn how to program</span>
                 </div>
               </div>
               <div className="row">
@@ -76,6 +78,33 @@ class App extends React.Component {
       }
     }
   }
+
+  // handleSearchChange(e) {
+  //   var context = this;
+  //   const searchEntry = e.target.value;
+  //   const searchUrl = 'https://www.googleapis.com/youtube/v3/search';
+  //   context.setState({
+  //     searchingVideo: true
+  //   });
+
+  //   const data = {
+  //     q: searchEntry, 
+  //     videoEmbeddable: true,
+  //     maxResults: 12,
+  //     key: API_KEY,
+  //     part: 'snippet',
+  //     type: 'video'
+  //   }
+
+  //   $.get(searchUrl, data, function(data) {
+  //     context.setState({
+  //       searchVideoList: data.items
+  //     });
+  //   });
+  // }
+
+  
+  // <SearchBox handleSearchChange = {this.handleSearchChange.bind(this)} />
 }
 
 ReactDOM.render((

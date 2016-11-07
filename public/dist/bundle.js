@@ -64,8 +64,10 @@
 	var NewVideoForm = __webpack_require__(/*! ./NewVideoForm.jsx */ 235);
 	var VideoTable = __webpack_require__(/*! ./VideoTable.jsx */ 236);
 	var VideoPage = __webpack_require__(/*! ./VideoPage.jsx */ 239);
+	var SearchBox = __webpack_require__(/*! ./SearchBox.jsx */ 264);
 	var utils = __webpack_require__(/*! ../../lib/utils/videoHelpers.js */ 240);
 	var bootstrap = __webpack_require__(/*! bootstrap */ 251);
+	var API_KEY = __webpack_require__(/*! ../../lib/config/apiKeys */ 244);
 	
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -134,7 +136,7 @@
 	                  React.createElement(
 	                    'span',
 	                    null,
-	                    'Join Codeable, your one stop shop for learning how to program'
+	                    'Join Codeable, your one place to learn how to program'
 	                  )
 	                )
 	              ),
@@ -182,6 +184,34 @@
 	        }
 	      }
 	    }
+	
+	    // handleSearchChange(e) {
+	    //   var context = this;
+	    //   const searchEntry = e.target.value;
+	    //   const searchUrl = 'https://www.googleapis.com/youtube/v3/search';
+	    //   context.setState({
+	    //     searchingVideo: true
+	    //   });
+	
+	    //   const data = {
+	    //     q: searchEntry, 
+	    //     videoEmbeddable: true,
+	    //     maxResults: 12,
+	    //     key: API_KEY,
+	    //     part: 'snippet',
+	    //     type: 'video'
+	    //   }
+	
+	    //   $.get(searchUrl, data, function(data) {
+	    //     context.setState({
+	    //       searchVideoList: data.items
+	    //     });
+	    //   });
+	    // }
+	
+	
+	    // <SearchBox handleSearchChange = {this.handleSearchChange.bind(this)} />
+	
 	  }]);
 	
 	  return App;
@@ -28220,6 +28250,7 @@
 		return 'https://www.youtube.com/embed/'+ videoId;
 	}
 	
+	
 	exports.getAllVideoIds = function(data) {
 		let ids = [];
 		data.forEach(item => {
@@ -28529,12 +28560,18 @@
 	    key: 'handleCodeRun',
 	    value: function handleCodeRun() {
 	      var prog = document.getElementById("code-editor").value;
+	      //for each import
+	      //check filename
+	      //if filename is equal to one of the tabs' names
+	      //get value of tabs
+	      //replace the import blurb with the value of tabs
+	
 	      var mypre = document.getElementById("output");
-	      console.log('this is the output', mypre);
 	      mypre.innerHTML = '';
 	      Sk.pre = "output";
 	      Sk.configure({ output: this.handleDisplayOutput.bind(this), read: this.builtinRead.bind(this) });
 	      (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+	      Sk.canvas = 'mycanvas';
 	      var myPromise = Sk.misceval.asyncToPromise(function () {
 	        return Sk.importMainWithBody("<stdin>", false, prog, true);
 	      });
@@ -28613,23 +28650,6 @@
 	}(React.Component);
 	
 	module.exports = CodeEditor;
-	
-	/*
-	<iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowfullscreen></iframe>
-	<iframe src="https://trinket.io/embed/python/5375445fcc?toggleCode=true" allowfullscreen></iframe
-	*/
-	
-	/*
-	    <div className="embed-responsive embed-responsive-4by3">
-	      <iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
-	    </div>
-	*/
-	
-	/*
-	        <div className="row">
-	          <button type="button" onClick={this.handleCodeRun.bind(this)}>Run</button> 
-	        </div>
-	*/
 
 /***/ },
 /* 247 */
@@ -31297,6 +31317,30 @@
 	
 	}(jQuery);
 
+
+/***/ },
+/* 264 */
+/*!**************************************!*\
+  !*** ./app/components/SearchBox.jsx ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var SearchBox = function SearchBox(_ref) {
+		var handleSearchChange = _ref.handleSearchChange;
+	
+	
+		return React.createElement(
+			"div",
+			null,
+			React.createElement("input", { className: "form-control", type: "text", onChange: handleSearchChange.bind(undefined) })
+		);
+	};
+	
+	module.exports = SearchBox;
 
 /***/ }
 /******/ ]);
