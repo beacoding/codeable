@@ -7,6 +7,9 @@ var Video = db.define('video', {
   videoTitle: Sequelize.STRING,
   videoDescription: Sequelize.STRING,
   videoImage: Sequelize.STRING,
+  videoViews: Sequelize.INTEGER,
+  videoLikes: Sequelize.INTEGER,
+  videoDislikes: Sequelize.INTEGER
 });
 
 module.exports = Video;

@@ -28,7 +28,9 @@ class CodeEditor extends React.Component {
       theme: 'solarized dark',
       styleActiveLine: true,
       matchBrackets: true,
+      autoCloseBrackets: true,
       indent: true,
+      mode: 'javascript'
     });
 
     editor.on('changes', function(editor, e){

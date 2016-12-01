@@ -73,6 +73,10 @@ class VideoPage extends React.Component {
                 <CodeOutput />
               </div>
   	  			</div>
+
+            <div className="col-md-4">
+              <Console />
+            </div>
           </div>
 			</div>
 	  	)
