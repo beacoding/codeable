@@ -64,10 +64,12 @@
 	var NewVideoForm = __webpack_require__(/*! ./NewVideoForm.jsx */ 235);
 	var VideoTable = __webpack_require__(/*! ./VideoTable.jsx */ 236);
 	var VideoPage = __webpack_require__(/*! ./VideoPage.jsx */ 239);
-	var SearchBox = __webpack_require__(/*! ./SearchBox.jsx */ 251);
+	var SearchBox = __webpack_require__(/*! ./SearchBox.jsx */ 252);
+	var VideoSearchResults = __webpack_require__(/*! ./VideoSearchResults.jsx */ 253);
 	var utils = __webpack_require__(/*! ../../lib/utils/videoHelpers.js */ 240);
-	var bootstrap = __webpack_require__(/*! bootstrap */ 252);
+	var bootstrap = __webpack_require__(/*! bootstrap */ 254);
 	var API_KEY = __webpack_require__(/*! ../../lib/config/apiKeys */ 244);
+	var Slider = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"react-slick\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 	
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -78,7 +80,8 @@
 	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 	
 	    _this.state = {
-	      videoList: []
+	      videoList: [],
+	      searchVideoList: []
 	    };
 	    return _this;
 	  }
@@ -86,7 +89,7 @@
 	  _createClass(App, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.getAllVideos = $.get('/getVideos', function (data) {
+	      this.getAllVideos = $.get('/video/getVideos', function (data) {
 	        var videos = utils.getAllVideoObjects(data);
 	        this.setState({
 	          videoList: videos
@@ -110,47 +113,33 @@
 	              { className: 'overlay' },
 	              React.createElement(
 	                'div',
-	                { className: 'row' },
+	                { className: 'logo-container' },
 	                React.createElement(
-	                  'div',
-	                  { className: 'col-md-12 logo-container' },
-	                  React.createElement(
-	                    'a',
-	                    { href: '/', className: 'title' },
-	                    ' CODEABLE '
-	                  )
+	                  'a',
+	                  { href: '/', className: 'title' },
+	                  ' CODEABLE '
 	                )
 	              ),
 	              React.createElement(
 	                'div',
-	                { className: 'row' },
-	                React.createElement(
-	                  'div',
-	                  { className: 'col-md-4 col-md-offset-4 description-container' },
-	                  React.createElement(
-	                    'span',
-	                    null,
-	                    'Ready to conquer the programming world?'
-	                  ),
-	                  React.createElement('br', null),
-	                  React.createElement(
-	                    'span',
-	                    null,
-	                    'Join Codeable, your one place to learn how to program'
-	                  )
-	                )
+	                { className: 'subtitle' },
+	                'Ready to conquer the programming world?',
+	                React.createElement('br', null),
+	                'Join Codeable, your one place to learn how to program'
 	              ),
 	              React.createElement(
 	                'div',
-	                { className: 'row' },
-	                React.createElement(
-	                  'div',
-	                  { className: 'col-md-4 col-md-offset-4 homepage-form' },
-	                  React.createElement(NewVideoForm, { handleNewVideoSubmit: this.handleNewVideoSubmit.bind(this) })
-	                )
+	                { className: 'new-video-container' },
+	                React.createElement(NewVideoForm, { handleNewVideoSubmit: this.handleNewVideoSubmit.bind(this) }),
+	                React.createElement(SearchBox, { handleSearchChange: this.handleSearchChange.bind(this) })
 	              )
 	            )
 	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'video-search-results-container' },
+	          React.createElement(VideoSearchResults, { videos: this.state.searchVideoList })
 	        ),
 	        React.createElement(
 	          'div',
@@ -176,7 +165,7 @@
 	        var videoId = utils.getVideoId(input);
 	
 	        if (utils.isValidUrl(input)) {
-	          $.post('/submitVideo', { videoId: videoId, videoUrl: input }, function () {
+	          $.post('/video/submitVideo', { videoId: videoId, videoUrl: input }, function () {
 	            location.reload();
 	          });
 	        } else {
@@ -184,34 +173,28 @@
 	        }
 	      }
 	    }
+	  }, {
+	    key: 'handleSearchChange',
+	    value: function handleSearchChange(e) {
+	      var context = this;
+	      var searchEntry = e.target.value;
+	      var searchUrl = 'https://www.googleapis.com/youtube/v3/search?';
 	
-	    // handleSearchChange(e) {
-	    //   var context = this;
-	    //   const searchEntry = e.target.value;
-	    //   const searchUrl = 'https://www.googleapis.com/youtube/v3/search';
-	    //   context.setState({
-	    //     searchingVideo: true
-	    //   });
+	      var data = {
+	        q: searchEntry,
+	        videoEmbeddable: true,
+	        maxResults: 12,
+	        key: API_KEY,
+	        part: 'snippet',
+	        type: 'video'
+	      };
 	
-	    //   const data = {
-	    //     q: searchEntry, 
-	    //     videoEmbeddable: true,
-	    //     maxResults: 12,
-	    //     key: API_KEY,
-	    //     part: 'snippet',
-	    //     type: 'video'
-	    //   }
-	
-	    //   $.get(searchUrl, data, function(data) {
-	    //     context.setState({
-	    //       searchVideoList: data.items
-	    //     });
-	    //   });
-	    // }
-	
-	
-	    // <SearchBox handleSearchChange = {this.handleSearchChange.bind(this)} />
-	
+	      $.get(searchUrl, data, function (data) {
+	        context.setState({
+	          searchVideoList: data.items
+	        });
+	      });
+	    }
 	  }]);
 	
 	  return App;
@@ -27957,8 +27940,16 @@
 	var React = __webpack_require__(/*! react */ 3);
 	
 	var NewVideoForm = function NewVideoForm(_ref) {
-		var handleNewVideoSubmit = _ref.handleNewVideoSubmit;
-		return React.createElement("input", { className: "form-control", type: "text", placeholder: "Enter a new video", onKeyPress: handleNewVideoSubmit.bind(undefined) });
+	  var handleNewVideoSubmit = _ref.handleNewVideoSubmit;
+	  return React.createElement(
+	    "div",
+	    null,
+	    React.createElement("input", {
+	      className: "form-control",
+	      type: "text",
+	      placeholder: "Enter a new video",
+	      onKeyPress: handleNewVideoSubmit.bind(undefined) })
+	  );
 	};
 	
 	module.exports = NewVideoForm;
@@ -28091,10 +28082,10 @@
 	var utils = __webpack_require__(/*! ../../lib/utils/videoHelpers.js */ 240);
 	var VideoPlayer = __webpack_require__(/*! ./VideoPlayer.jsx */ 245);
 	var CodeEditor = __webpack_require__(/*! ./CodeEditor.jsx */ 246);
-	var CodeOutput = __webpack_require__(/*! ./CodeOutput.jsx */ 247);
-	var Console = __webpack_require__(/*! ./Console.jsx */ 248);
-	var QuestionSection = __webpack_require__(/*! ./QuestionSection.jsx */ 249);
-	var VideoDescription = __webpack_require__(/*! ./VideoDescription.jsx */ 250);
+	var CodeOutput = __webpack_require__(/*! ./CodeOutput.jsx */ 248);
+	var Console = __webpack_require__(/*! ./Console.jsx */ 249);
+	var QuestionSection = __webpack_require__(/*! ./QuestionSection.jsx */ 250);
+	var VideoDescription = __webpack_require__(/*! ./VideoDescription.jsx */ 251);
 	
 	var VideoPage = function (_React$Component) {
 	  _inherits(VideoPage, _React$Component);
@@ -28105,7 +28096,8 @@
 	    var _this = _possibleConstructorReturn(this, (VideoPage.__proto__ || Object.getPrototypeOf(VideoPage)).call(this, props));
 	
 	    _this.state = {
-	      currentVideo: null
+	      currentVideo: null,
+	      toggle: false
 	    };
 	    return _this;
 	  }
@@ -28114,7 +28106,7 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      this.checkVideoIdInDB = $.ajax({
-	        url: '/checkVideoIdInDB',
+	        url: '/video/checkVideoIdInDB',
 	        data: { videoId: this.props.params.videoId },
 	        success: function (video) {
 	          this.setState({
@@ -28127,11 +28119,18 @@
 	      });
 	    }
 	  }, {
+	    key: 'handleToggleConsole',
+	    value: function handleToggleConsole() {
+	      this.setState({ toggle: !this.state.toggle });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      if (this.state.currentVideo === null) {
 	        return null;
 	      } else {
+	        var currentEditor = this.state.toggle ? React.createElement(Console, { handleToggleConsole: this.handleToggleConsole.bind(this) }) : React.createElement(CodeEditor, { handleToggleConsole: this.handleToggleConsole.bind(this) });
+	
 	        return React.createElement(
 	          'div',
 	          null,
@@ -28153,58 +28152,37 @@
 	            { className: 'video-page-container' },
 	            React.createElement(
 	              'div',
-	              { className: 'row' },
-	              React.createElement(
-	                'div',
-	                { className: 'col-md-12 title' },
-	                this.state.currentVideo.videoTitle
-	              )
+	              { className: 'title' },
+	              this.state.currentVideo.videoTitle
 	            ),
 	            React.createElement(
 	              'div',
-	              { className: 'row' },
+	              { className: 'video-player-code-editor-container row' },
 	              React.createElement(
 	                'div',
-	                { className: 'col-md-6' },
+	                { className: 'video-player-container col-md-6' },
 	                React.createElement(VideoPlayer, { video: this.state.currentVideo })
 	              ),
 	              React.createElement(
 	                'div',
-	                { className: 'col-md-6' },
-	                React.createElement(CodeEditor, null)
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'col-md-6' },
-	                React.createElement(
-	                  'div',
-	                  { className: 'row' },
-	                  React.createElement(
-	                    'div',
-	                    { className: 'col-md-12' },
-	                    React.createElement(VideoDescription, { video: this.state.currentVideo })
-	                  )
-	                ),
-	                React.createElement(
-	                  'div',
-	                  { className: 'row' },
-	                  React.createElement(
-	                    'div',
-	                    { className: 'col-md-12' },
-	                    React.createElement(QuestionSection, { video: this.state.currentVideo })
-	                  )
-	                )
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'col-md-6 hidden' },
-	                React.createElement(CodeOutput, null)
+	                { className: 'code-editor-container col-md-6' },
+	                currentEditor
 	              )
 	            ),
 	            React.createElement(
 	              'div',
-	              { className: 'col-md-4' },
-	              React.createElement(Console, null)
+	              { className: 'row' },
+	              React.createElement(
+	                'div',
+	                { className: 'col-md-6' },
+	                React.createElement(VideoDescription, { video: this.state.currentVideo }),
+	                React.createElement(QuestionSection, { video: this.state.currentVideo })
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'col-md-6' },
+	                React.createElement(CodeOutput, null)
+	              )
 	            )
 	          )
 	        );
@@ -28488,6 +28466,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 3);
+	var CodeEditorNavBar = __webpack_require__(/*! ./CodeEditorNavBar.jsx */ 247);
 	
 	var CodeEditor = function (_React$Component) {
 	  _inherits(CodeEditor, _React$Component);
@@ -28498,7 +28477,8 @@
 	    var _this = _possibleConstructorReturn(this, (CodeEditor.__proto__ || Object.getPrototypeOf(CodeEditor)).call(this, props));
 	
 	    _this.state = {
-	      codeValue: null
+	      codeValue: null,
+	      toggle: false
 	    };
 	    return _this;
 	  }
@@ -28525,7 +28505,8 @@
 	        styleActiveLine: true,
 	        matchBrackets: true,
 	        autoCloseBrackets: true,
-	        indent: true
+	        indent: true,
+	        mode: 'python'
 	      });
 	
 	      editor.on('changes', function (editor, e) {
@@ -28593,41 +28574,11 @@
 	    value: function render() {
 	      return React.createElement(
 	        'div',
-	        { className: 'code-editor-container' },
+	        null,
 	        React.createElement(
 	          'div',
 	          { className: 'code-editor-nav-bar' },
-	          React.createElement(
-	            'nav',
-	            { className: 'navbar navbar-default navbar-static-top' },
-	            React.createElement(
-	              'div',
-	              { className: 'container-fluid' },
-	              React.createElement(
-	                'ul',
-	                { className: 'nav navbar-nav' },
-	                React.createElement(
-	                  'li',
-	                  null,
-	                  'Mode'
-	                ),
-	                React.createElement(
-	                  'li',
-	                  { onClick: this.handleCodeRun.bind(this) },
-	                  React.createElement(
-	                    'a',
-	                    { href: '#' },
-	                    'Run'
-	                  )
-	                ),
-	                React.createElement(
-	                  'li',
-	                  { className: 'save' },
-	                  'Save'
-	                )
-	              )
-	            )
-	          )
+	          React.createElement(CodeEditorNavBar, { handleCodeRun: this.handleCodeRun.bind(this), handleToggleConsole: this.props.handleToggleConsole })
 	        ),
 	        React.createElement(
 	          'form',
@@ -28650,6 +28601,31 @@
 
 /***/ },
 /* 247 */
+/*!*********************************************!*\
+  !*** ./app/components/CodeEditorNavBar.jsx ***!
+  \*********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var CodeEditorNavbar = function CodeEditorNavbar(_ref) {
+	  var handleCodeRun = _ref.handleCodeRun;
+	  var handleToggleConsole = _ref.handleToggleConsole;
+	
+	  return React.createElement(
+	    "div",
+	    { className: "code-editor-nav-bar" },
+	    handleCodeRun ? React.createElement("span", { className: "ion-ios-play-outline", onClick: handleCodeRun.bind(undefined) }) : null,
+	    React.createElement("span", { className: "ion-ios-monitor-outline", onClick: handleToggleConsole.bind(undefined) })
+	  );
+	};
+	
+	module.exports = CodeEditorNavbar;
+
+/***/ },
+/* 248 */
 /*!***************************************!*\
   !*** ./app/components/CodeOutput.jsx ***!
   \***************************************/
@@ -28671,13 +28647,13 @@
 	module.exports = CodeOutput;
 
 /***/ },
-/* 248 */
+/* 249 */
 /*!************************************!*\
   !*** ./app/components/Console.jsx ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -28688,6 +28664,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var React = __webpack_require__(/*! react */ 3);
+	var CodeEditorNavBar = __webpack_require__(/*! ./CodeEditorNavBar.jsx */ 247);
 	
 	var Console = function (_React$Component) {
 		_inherits(Console, _React$Component);
@@ -28699,12 +28676,17 @@
 		}
 	
 		_createClass(Console, [{
-			key: "render",
+			key: 'render',
 			value: function render() {
 				return React.createElement(
-					"div",
-					{ className: "console-container" },
-					React.createElement("iframe", { frameBorder: "0", src: "/brython-console.html" })
+					'div',
+					{ className: 'console-container' },
+					React.createElement(
+						'div',
+						{ className: 'code-editor-nav-bar' },
+						React.createElement(CodeEditorNavBar, { handleToggleConsole: this.props.handleToggleConsole })
+					),
+					React.createElement('iframe', { frameBorder: '0', src: '/brython-console.html' })
 				);
 			}
 		}]);
@@ -28715,7 +28697,7 @@
 	module.exports = Console;
 
 /***/ },
-/* 249 */
+/* 250 */
 /*!********************************************!*\
   !*** ./app/components/QuestionSection.jsx ***!
   \********************************************/
@@ -28756,7 +28738,7 @@
 	module.exports = QuestionSection;
 
 /***/ },
-/* 250 */
+/* 251 */
 /*!*********************************************!*\
   !*** ./app/components/VideoDescription.jsx ***!
   \*********************************************/
@@ -28839,7 +28821,7 @@
 	module.exports = VideoDescription;
 
 /***/ },
-/* 251 */
+/* 252 */
 /*!**************************************!*\
   !*** ./app/components/SearchBox.jsx ***!
   \**************************************/
@@ -28856,35 +28838,72 @@
 		return React.createElement(
 			"div",
 			null,
-			React.createElement("input", { className: "form-control", type: "text", onChange: handleSearchChange.bind(undefined) })
+			React.createElement("input", {
+				className: "form-control",
+				type: "text",
+				placeholder: "Search Youtube Videos",
+				onChange: handleSearchChange.bind(undefined) })
 		);
 	};
 	
 	module.exports = SearchBox;
 
 /***/ },
-/* 252 */
+/* 253 */
+/*!***********************************************!*\
+  !*** ./app/components/VideoSearchResults.jsx ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(/*! react */ 3);
+	
+	var VideoSearchResults = function VideoSearchResults(_ref) {
+	  var videos = _ref.videos;
+	
+	  if (!videos.length) {
+	    return React.createElement("div", null);
+	  }
+	
+	  return React.createElement(
+	    "div",
+	    null,
+	    videos.map(function (video, i) {
+	      return React.createElement(
+	        "div",
+	        { className: "video-search-results", key: video.id.videoId },
+	        React.createElement("img", { src: video.snippet.thumbnails.medium.url })
+	      );
+	    })
+	  );
+	};
+	
+	module.exports = VideoSearchResults;
+
+/***/ },
+/* 254 */
 /*!************************************!*\
   !*** ./~/bootstrap/dist/js/npm.js ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-	__webpack_require__(/*! ../../js/transition.js */ 253)
-	__webpack_require__(/*! ../../js/alert.js */ 254)
-	__webpack_require__(/*! ../../js/button.js */ 255)
-	__webpack_require__(/*! ../../js/carousel.js */ 256)
-	__webpack_require__(/*! ../../js/collapse.js */ 257)
-	__webpack_require__(/*! ../../js/dropdown.js */ 258)
-	__webpack_require__(/*! ../../js/modal.js */ 259)
-	__webpack_require__(/*! ../../js/tooltip.js */ 260)
-	__webpack_require__(/*! ../../js/popover.js */ 261)
-	__webpack_require__(/*! ../../js/scrollspy.js */ 262)
-	__webpack_require__(/*! ../../js/tab.js */ 263)
-	__webpack_require__(/*! ../../js/affix.js */ 264)
+	__webpack_require__(/*! ../../js/transition.js */ 255)
+	__webpack_require__(/*! ../../js/alert.js */ 256)
+	__webpack_require__(/*! ../../js/button.js */ 257)
+	__webpack_require__(/*! ../../js/carousel.js */ 258)
+	__webpack_require__(/*! ../../js/collapse.js */ 259)
+	__webpack_require__(/*! ../../js/dropdown.js */ 260)
+	__webpack_require__(/*! ../../js/modal.js */ 261)
+	__webpack_require__(/*! ../../js/tooltip.js */ 262)
+	__webpack_require__(/*! ../../js/popover.js */ 263)
+	__webpack_require__(/*! ../../js/scrollspy.js */ 264)
+	__webpack_require__(/*! ../../js/tab.js */ 265)
+	__webpack_require__(/*! ../../js/affix.js */ 266)
 
 /***/ },
-/* 253 */
+/* 255 */
 /*!**************************************!*\
   !*** ./~/bootstrap/js/transition.js ***!
   \**************************************/
@@ -28952,7 +28971,7 @@
 
 
 /***/ },
-/* 254 */
+/* 256 */
 /*!*********************************!*\
   !*** ./~/bootstrap/js/alert.js ***!
   \*********************************/
@@ -29055,7 +29074,7 @@
 
 
 /***/ },
-/* 255 */
+/* 257 */
 /*!**********************************!*\
   !*** ./~/bootstrap/js/button.js ***!
   \**********************************/
@@ -29189,7 +29208,7 @@
 
 
 /***/ },
-/* 256 */
+/* 258 */
 /*!************************************!*\
   !*** ./~/bootstrap/js/carousel.js ***!
   \************************************/
@@ -29435,7 +29454,7 @@
 
 
 /***/ },
-/* 257 */
+/* 259 */
 /*!************************************!*\
   !*** ./~/bootstrap/js/collapse.js ***!
   \************************************/
@@ -29656,7 +29675,7 @@
 
 
 /***/ },
-/* 258 */
+/* 260 */
 /*!************************************!*\
   !*** ./~/bootstrap/js/dropdown.js ***!
   \************************************/
@@ -29830,7 +29849,7 @@
 
 
 /***/ },
-/* 259 */
+/* 261 */
 /*!*********************************!*\
   !*** ./~/bootstrap/js/modal.js ***!
   \*********************************/
@@ -30178,7 +30197,7 @@
 
 
 /***/ },
-/* 260 */
+/* 262 */
 /*!***********************************!*\
   !*** ./~/bootstrap/js/tooltip.js ***!
   \***********************************/
@@ -30707,7 +30726,7 @@
 
 
 /***/ },
-/* 261 */
+/* 263 */
 /*!***********************************!*\
   !*** ./~/bootstrap/js/popover.js ***!
   \***********************************/
@@ -30824,7 +30843,7 @@
 
 
 /***/ },
-/* 262 */
+/* 264 */
 /*!*************************************!*\
   !*** ./~/bootstrap/js/scrollspy.js ***!
   \*************************************/
@@ -31005,7 +31024,7 @@
 
 
 /***/ },
-/* 263 */
+/* 265 */
 /*!*******************************!*\
   !*** ./~/bootstrap/js/tab.js ***!
   \*******************************/
@@ -31169,7 +31188,7 @@
 
 
 /***/ },
-/* 264 */
+/* 266 */
 /*!*********************************!*\
   !*** ./~/bootstrap/js/affix.js ***!
   \*********************************/

@@ -13,14 +13,15 @@ class VideoPage extends React.Component {
     super(props);
 
     this.state = {
-      currentVideo: null
+      currentVideo: null,
+      toggle: false
     };
   }
 
   componentWillMount() {
     this.checkVideoIdInDB = 
     	$.ajax({
-    		url: '/checkVideoIdInDB',
+    		url: '/video/checkVideoIdInDB',
     		data: {videoId: this.props.params.videoId},
     		success: function(video) {
     			this.setState({
@@ -33,10 +34,16 @@ class VideoPage extends React.Component {
     	});
   }
 
+  handleToggleConsole() {
+   this.setState({toggle: !this.state.toggle}); 
+  }
+
   render() {
   	if (this.state.currentVideo === null) {
   		return null;
   	} else {
+      const currentEditor = this.state.toggle ? <Console handleToggleConsole={this.handleToggleConsole.bind(this)}/> : <CodeEditor handleToggleConsole={this.handleToggleConsole.bind(this)}/>
+
 	  	return (
 	  		<div>
           <div className="navbar-container row">
@@ -45,38 +52,26 @@ class VideoPage extends React.Component {
             </div>
           </div>
           <div className="video-page-container">
-  	  			<div className="row">
-  	  				<div className="col-md-12 title">
+  	  				<div className="title">
   	  					{this.state.currentVideo.videoTitle}
     					</div>
-  				  </div>
-  	  			<div className="row">
-              <div className="col-md-6">
-  	  			      <VideoPlayer video={this.state.currentVideo} />
-              </div>
-              <div className="col-md-6">
-                <CodeEditor />
-              </div>
-              <div className="col-md-6">
-                <div className="row">
-                  <div className="col-md-12">
-                    <VideoDescription video ={this.state.currentVideo} />
-                  </div>
+              <div className="video-player-code-editor-container row">
+                <div className="video-player-container col-md-6">
+  			          <VideoPlayer video={this.state.currentVideo} />
                 </div>
-                <div className="row">
-                  <div className="col-md-12">
-                    <QuestionSection video={this.state.currentVideo} />
-                  </div>
+                <div className="code-editor-container col-md-6">
+                  {currentEditor}
                 </div>
               </div>
-              <div className="col-md-6 hidden">
-                <CodeOutput />
+              <div className="row">
+                <div className="col-md-6">
+                  <VideoDescription video ={this.state.currentVideo} />
+                  <QuestionSection video={this.state.currentVideo} />
+                </div>
+                <div className="col-md-6">
+                  <CodeOutput />
+                </div>
               </div>
-  	  			</div>
-
-            <div className="col-md-4">
-              <Console />
-            </div>
           </div>
 			</div>
 	  	)

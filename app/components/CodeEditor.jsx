@@ -1,11 +1,13 @@
 const React = require('react');
+const CodeEditorNavBar = require('./CodeEditorNavBar.jsx');
 
 class CodeEditor extends React.Component {
 	constructor(props) {
 		super(props);
 
     this.state = {
-      codeValue: null
+      codeValue: null,
+      toggle: false
     }
 	}
 
@@ -30,7 +32,7 @@ class CodeEditor extends React.Component {
       matchBrackets: true,
       autoCloseBrackets: true,
       indent: true,
-      mode: 'javascript'
+      mode: 'python'
     });
 
     editor.on('changes', function(editor, e){
@@ -91,23 +93,17 @@ class CodeEditor extends React.Component {
     window.localStorage.setItem(window.location, code);
   }
 
+
+
 	render() {
 	  return (
-	    <div className="code-editor-container">
+	    <div>
         <div className="code-editor-nav-bar">
-          <nav className="navbar navbar-default navbar-static-top">
-            <div className="container-fluid">
-              <ul className="nav navbar-nav">
-                <li>Mode</li>
-                <li onClick={this.handleCodeRun.bind(this)}><a href="#">Run</a></li>
-                <li className="save">Save</li>
-              </ul>
-            </div>
-          </nav>
+          <CodeEditorNavBar handleCodeRun={this.handleCodeRun.bind(this)} handleToggleConsole={this.props.handleToggleConsole}/>
         </div>
 	    	<form> 
 	    	<textarea id="code-editor">
-	    	{this.state.codeValue}
+	    	  {this.state.codeValue}
 	    	</textarea><br/>
 	    	</form>
 		  </div>
