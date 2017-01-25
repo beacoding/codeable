@@ -3,6 +3,7 @@ const router = express.Router();
 const Video = require('../models/Videos.js');
 const request = require('request');
 const keys = require('../lib/keys.js');
+const utils = require('../lib/utils/videoHelpers.js');
 
 /* GET videos listing. */
 router.get('/getVideos', function(req, res, next) {
@@ -19,7 +20,13 @@ router.get('/checkVideoIdInDB', function(req, res, next) {
 	})
 	.then(function(video) {
 		if (video) {
-			res.send(200, video);
+      const newCount = video.dataValues.videoClicks + 1;
+      video.update({
+        videoClicks: newCount
+      })
+      .then(function(response) {
+        res.status(201).send(response);
+      });
 		} else {
 			res.send(400, false);
 		}
@@ -63,5 +70,38 @@ router.post('/submitVideo', function(req, res, next) {
 		}
 	});
 });
+
+
+router.post('/addSearchedVideo', function(req, res, next) {
+	const video = req.body;
+
+	Video.findOrCreate({
+		where: {
+			videoId: video.videoId,
+			videoId: video.videoId,
+			videoUrl: video.videoUrl,
+			videoTitle: video.videoTitle,
+			videoDescription: video.videoDescription,
+			videoImage: video.videoImage
+		}
+	})
+	.then(function(data) {
+		res.send(data);
+	})
+});
+
+router.get('/mostPopularVideos', function(req, res) {
+  Video.findAll({
+    order: 'videoClicks DESC'
+  })
+  .then(function(results) {
+    res.status(200).send(results);
+  })
+  .catch(function(err) {
+    console.log(err);
+    res.status(500).send(err);
+  });
+});
+
 
 module.exports = router;

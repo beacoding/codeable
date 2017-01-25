@@ -21,12 +21,12 @@ class VideoPage extends React.Component {
   componentWillMount() {
     this.checkVideoIdInDB = 
     	$.ajax({
-    		url: '/video/checkVideoIdInDB',
+    		url: '/videos/checkVideoIdInDB',
     		data: {videoId: this.props.params.videoId},
     		success: function(video) {
     			this.setState({
     				currentVideo: video
-    			})
+    			});
     		}.bind(this),
     		error: function(err) {
     			console.log('not in db', err);
@@ -77,13 +77,6 @@ class VideoPage extends React.Component {
 	  	)
   	}
   }
-
 }
-
-/*
-              <div className="col-md-4 hidden">
-                <Console />
-              </div>
-              */
 
 module.exports = VideoPage;

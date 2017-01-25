@@ -9,7 +9,8 @@ var Video = db.define('video', {
   videoImage: Sequelize.STRING,
   videoViews: Sequelize.INTEGER,
   videoLikes: Sequelize.INTEGER,
-  videoDislikes: Sequelize.INTEGER
+  videoDislikes: Sequelize.INTEGER,
+  videoClicks: Sequelize.INTEGER
 });
 
 module.exports = Video;

@@ -66,25 +66,29 @@ a {
               border: 0px; }
 
 .video-search-results-container {
-  width: 100%;
-  padding: 10px;
   background: #242327;
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  -webkit-flex-direction: column;
-  flex-direction: column; }
+  min-height: 232px;
+  min-width: 0;
+  margin: 0 auto;
+  width: 90%;
+  position: relative; }
   .video-search-results-container .video-search-results {
-    display: inline-block;
-    padding: 5px; }
+    display: inline-block; }
 
 .video-table-container {
   width: 100%;
   padding: 10px;
+  margin-top: 100px;
+  position: static;
   background: #242327; }
   .video-table-container .video-table {
     padding: 30px; }
+  .video-table-container .header {
+    text-align: center;
+    color: white;
+    font: "Advent Pro", sans-serif;
+    font-size: 2em; }
 
 .video-entry-image {
   position: relative;
@@ -197,7 +201,8 @@ a {
   color: #F4F6F7;
   font-family: 'Oxygen Mono', Consolas, 'Liberation Mono', 'DejaVu Sans Mono', monospace;
   font-size: 14px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   height: 100%;
   width: 100%;
   border-width: 0;
