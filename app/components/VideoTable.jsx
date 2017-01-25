@@ -30,10 +30,5 @@ const VideoTable = ({videos}) => {
 	);
 }
 
-// VideoTable.propTypes = {
-//   videos: React.Proptypes.array.isRequired
-// }
-
-
 
 module.exports = VideoTable;

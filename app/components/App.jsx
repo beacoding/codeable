@@ -4,23 +4,28 @@ const ReactDOM = require('react-dom');
 const NewVideoForm = require('./NewVideoForm.jsx');
 const VideoTable = require('./VideoTable.jsx');
 const VideoPage = require('./VideoPage.jsx');
+const SearchBox = require('./SearchBox.jsx');
+const VideoSearchResults = require('./VideoSearchResults.jsx');
 const utils = require('../../lib/utils/videoHelpers.js');
 const bootstrap = require('bootstrap');
+const API_KEY = require('../../lib/config/apiKeys');
+
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      videoList: []
+      videoList: [],
+      searchVideoList: []
     };
   }
 
   componentDidMount() {
-    this.getAllVideos = $.get('/getVideos', function(data) {
+    this.getAllVideos = $.get('/videos/mostPopularVideos', function(data) {
       const videos = utils.getAllVideoObjects(data);
       this.setState({
-        videoList: videos
+        videoList: videos,
       });
     }.bind(this));
   }
@@ -31,56 +36,98 @@ class App extends React.Component {
         <div className="homepage-container">
           <div className="homepage-landing">
             <div className="overlay">
-              <div className="row">
-                <div className="col-md-12 logo-container">
-                  <a href="/" className="title"> CODEABLE </a>
-                </div>
+              <div className="logo-container">
+                <a href="/" className="title"> CODEABLE </a>
               </div>
-              <div className="row">
-                <div className="col-md-4 col-md-offset-4 description-container">
-                  <span>Ready to conquer the programming world?</span><br/>
-                  <span>Join Codeable, your one stop shop for learning how to program</span>
+              <div className="subtitle">
+                    Want to write python code alongside YouTube Videos?<br/>
+                    Use Codeable!
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-4 col-md-offset-4 homepage-form">
-                  <NewVideoForm handleNewVideoSubmit ={this.handleNewVideoSubmit.bind(this)}/>
+                <div className="new-video-container">
+                    <NewVideoForm handleNewVideoSubmit ={this.handleNewVideoSubmit.bind(this)}/>
+                    <SearchBox handleSearchChange={this.handleSearchChange.bind(this)}/>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="video-table-container">
-          <div className="container">
-            <VideoTable videos={this.state.videoList}/>
+          <div className="video-search-results-container">
+            <VideoSearchResults videos = {this.state.searchVideoList} handleSearchVideoClick={this.handleSearchVideoClick.bind(this)}/> 
+          </div>
+          <div className="video-table-container">
+            <div className="container">
+              <div className="header"> Most Recent Videos </div> 
+              <VideoTable videos={this.state.videoList}/>
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  //handlers
-  handleNewVideoSubmit(e) {
-    if (e.key === 'Enter') {
-      const input = e.target.value;
+    //handlers
+    handleNewVideoSubmit(e) {
+      if (e.key === 'Enter') {
+        const input = e.target.value;
 
-      const iFrameSrc = utils.createIFrameSrc(utils.getVideoId(input));
-      const videoId = utils.getVideoId(input);
+        const iFrameSrc = utils.createIFrameSrc(utils.getVideoId(input));
+        const videoId = utils.getVideoId(input);
 
-      if (utils.isValidUrl(input)) {
-        $.post('/submitVideo', {videoId: videoId, videoUrl: input}, function() {
-          location.reload();
-        });
-      } else {
-        console.log('Please enter a valid url');
+        if (utils.isValidUrl(input)) {
+          $.post('/videos/submitVideo', {videoId: videoId, videoUrl: input}, function() {
+            location.reload();
+          });
+        } else {
+          console.log('Please enter a valid url');
+        }
       }
     }
-  }
-}
 
-ReactDOM.render((
-  <Router history={browserHistory}>
-    <Route path="/" component={App}></Route>
-    <Route path="/video/:videoId" component={VideoPage}></Route>
+    handleSearchChange(e) {
+      var context = this;
+      const searchEntry = e.target.value;
+      const searchUrl = 'https://www.googleapis.com/youtube/v3/search?';
+
+      const data = {
+        q: searchEntry,
+        videoEmbeddable: true,
+        maxResults: 12,
+        key: API_KEY,
+        part: 'snippet',
+        type: 'video'
+      }
+
+      $.get(searchUrl, data, function(data) {
+        context.setState({
+          searchVideoList: data.items
+        });
+      });
+    }
+
+    handleSearchVideoClick(video) {
+      const context = this;
+      const videoObj = {
+        videoId: video.id.videoId,
+        videoTitle: video.snippet.title,
+        videoUrl: utils.getVideoUrlById(video.id.videoId),
+        videoDescription: video.snippet.description,
+        videoImage: video.snippet.thumbnails.medium.url
+      }
+      $.post('/videos/addSearchedVideo', videoObj, function(data) {
+        console.log(context.state.videoList, data[0]);
+        const videoList = context.state.videoList;
+        videoList.push(data[0]);
+        context.setState({
+          videoList: videoList
+        });
+        console.log(context.state.videoList);
+      })
+    }
+  }
+
+
+
+  ReactDOM.render((
+    <Router history={browserHistory}>
+      <Route path="/" component={App}></Route>
+      <Route path="/video/:videoId" component={VideoPage}></Route>
   </Router>
 ), document.getElementById('app'))

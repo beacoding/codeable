@@ -1,11 +1,13 @@
 const React = require('react');
+const CodeEditorNavBar = require('./CodeEditorNavBar.jsx');
 
 class CodeEditor extends React.Component {
 	constructor(props) {
 		super(props);
 
     this.state = {
-      codeValue: null
+      codeValue: null,
+      toggle: false
     }
 	}
 
@@ -28,7 +30,9 @@ class CodeEditor extends React.Component {
       theme: 'solarized dark',
       styleActiveLine: true,
       matchBrackets: true,
+      autoCloseBrackets: true,
       indent: true,
+      mode: 'python'
     });
 
     editor.on('changes', function(editor, e){
@@ -57,12 +61,18 @@ class CodeEditor extends React.Component {
 
   handleCodeRun() {
     const prog = document.getElementById("code-editor").value;
-    const mypre = document.getElementById("output"); 
-    console.log('this is the output', mypre);
+    //for each import
+      //check filename
+      //if filename is equal to one of the tabs' names
+        //get value of tabs
+        //replace the import blurb with the value of tabs
+
+    const mypre = document.getElementById("output");
     mypre.innerHTML = ''; 
     Sk.pre = "output";
     Sk.configure({output: this.handleDisplayOutput.bind(this), read:this.builtinRead.bind(this)}); 
     (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+    Sk.canvas = 'mycanvas';
     const myPromise = Sk.misceval.asyncToPromise(function() {
         return Sk.importMainWithBody("<stdin>", false, prog, true);
     });
@@ -83,23 +93,17 @@ class CodeEditor extends React.Component {
     window.localStorage.setItem(window.location, code);
   }
 
+
+
 	render() {
 	  return (
-	    <div className="code-editor-container">
+	    <div>
         <div className="code-editor-nav-bar">
-          <nav className="navbar navbar-default navbar-static-top">
-            <div className="container-fluid">
-              <ul className="nav navbar-nav">
-                <li>Mode</li>
-                <li onClick={this.handleCodeRun.bind(this)}><a href="#">Run</a></li>
-                <li className="save">Save</li>
-              </ul>
-            </div>
-          </nav>
+          <CodeEditorNavBar handleCodeRun={this.handleCodeRun.bind(this)} handleToggleConsole={this.props.handleToggleConsole}/>
         </div>
 	    	<form> 
 	    	<textarea id="code-editor">
-	    	{this.state.codeValue}
+	    	  {this.state.codeValue}
 	    	</textarea><br/>
 	    	</form>
 		  </div>
@@ -108,20 +112,3 @@ class CodeEditor extends React.Component {
 }
 
 module.exports = CodeEditor;
-
-/*
-<iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowfullscreen></iframe>
-<iframe src="https://trinket.io/embed/python/5375445fcc?toggleCode=true" allowfullscreen></iframe
-*/
-
-/*
-    <div className="embed-responsive embed-responsive-4by3">
-      <iframe className="embed-responsive-item" src="https://trinket.io/embed/python/5375445fcc" allowFullScreen></iframe>
-    </div>
-*/
-
-/*
-        <div className="row">
-          <button type="button" onClick={this.handleCodeRun.bind(this)}>Run</button> 
-        </div>
-*/

@@ -1,4 +1,5 @@
 const React = require('react');
+const CodeEditorNavBar = require('./CodeEditorNavBar.jsx');
 
 class Console extends React.Component {
 	constructor(props) {
@@ -9,7 +10,10 @@ class Console extends React.Component {
 	render() {
 		return (
 			<div className="console-container">
-        <iframe frameBorder="0" src="/brython-console.html"></iframe>
+				<div className="code-editor-nav-bar">
+				  <CodeEditorNavBar handleToggleConsole={this.props.handleToggleConsole}/>
+				</div>
+				<iframe frameBorder="0" src="/brython-console.html"></iframe>
 			</div>
 		)
 	}

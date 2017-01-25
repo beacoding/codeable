@@ -10,8 +10,4 @@ var VideoRow = ({row}) => (
 	</div>
 )
 
-// VideoRow.propTypes = {
-//   row: React.Proptypes.array.isRequired
-// }
-
 module.exports = VideoRow;
