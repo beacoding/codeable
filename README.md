@@ -1,3 +1,5 @@
+![Alt Text](http://g.recordit.co/gZ7cmnX7jM.gif)
+
 # Codeable
 
 Codeable is an online learn-how-to-code educational platform that simplifies and streamlines the process to actually learn! Send in any youtube video or course, and follow along with a side-by-side python editor and console that runs on your browser.
@@ -15,6 +17,4 @@ As of November 4, 2016, Codeable now has its own theme, is not using trinket.io 
 * [React](https://facebook.github.io/react/) - The web framework used
 * [SQLite3](https://sqlite.org/) - Database used
 * [Node.js](https://nodejs.org/en/) - Server
-
-![Alt Text](http://g.recordit.co/gZ7cmnX7jM.gif)
 
