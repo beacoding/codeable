@@ -1,6 +1,5 @@
-![Alt Text](http://g.recordit.co/gZ7cmnX7jM.gif)
-
 # Codeable
+![Alt Text](http://g.recordit.co/gZ7cmnX7jM.gif)
 
 Codeable is an online learn-how-to-code educational platform that simplifies and streamlines the process to actually learn! Send in any youtube video or course, and follow along with a side-by-side python editor and console that runs on your browser.
 
